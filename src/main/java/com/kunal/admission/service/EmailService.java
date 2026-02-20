@@ -5,22 +5,34 @@ import com.kunal.admission.repository.VisitorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 
 
 @Service
 public class EmailService {
-   // private final VisitorRepository visitorRepository;
-    //private static final Logger log = (Logger) LoggerFactory.getLogger(FollowUpScheduler.class);
-    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
-    public void sendFolloUpEmail(Visitor visitor){
-        log.info("Follow-up email sent to {}", visitor.getEmail());
-        log.info("Hello {}, place update your admission status.", visitor.getName());
 
-       // System.out.println("Follow Up From Bvicam: "+visitor.getEmail());
-       // System.out.println("Hello "+ visitor.getName()+ ", place update you admission Status. ");
-//        log.info("Follow-ip sent to {}");
-//        log.info(visitor.getEmail());
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+    private final JavaMailSender mailSender;
+
+    public EmailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    public void sendFolloUpEmail(Visitor visitor){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(visitor.getEmail());
+        message.setSubject("Admission Follow-up | BVICAM");
+        message.setText(
+                "Hello " + visitor.getName() + ",\n\n" +
+                        "We noticed that you started your admission process.\n" +
+                        "Please update your admission status at the earliest.\n\n" +
+                        "Regards,\n" +
+                        "BVICAM Admission Team"
+        );
+        mailSender.send(message);
+        log.info("Follow - Up email sent to {}", visitor.getEmail());
     }
 }

@@ -13,7 +13,8 @@ public class StudentApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "id",nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "visitor_id",nullable = false)
     private Visitor visitor;
 
     // personal info
