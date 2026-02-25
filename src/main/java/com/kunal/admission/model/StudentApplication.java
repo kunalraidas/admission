@@ -2,12 +2,18 @@ package com.kunal.admission.model;
 
 import com.kunal.admission.datavalues.AdmissionStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-public class StudentApplication {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "student_application") public class StudentApplication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +27,8 @@ public class StudentApplication {
     private String fatherName;
     private String motherName;
     private LocalDate dob;
+
+    @Column(length = 1000)
     private String address;
 
     // academic info

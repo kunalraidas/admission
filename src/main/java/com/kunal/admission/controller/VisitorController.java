@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/visitor")
 public class VisitorController {
-    private final VisitorService visitorService;
+     private final VisitorService visitorService;
 
     public VisitorController(VisitorService visitorService) {
         this.visitorService = visitorService;

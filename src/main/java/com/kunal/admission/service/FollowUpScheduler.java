@@ -26,7 +26,7 @@ public class FollowUpScheduler {
     //@Scheduled(cron = "0 0 10 * * ?")
     @Scheduled(cron = "0 */1 * * * ?")
     public void sendFollowUpMessages(){
-        System.out.println("🔥 FOLLOW-UP SCHEDULER TRIGGERED 🔥");
+        System.out.println("------- FOLLOW-UP SCHEDULER TRIGGERED --------- ");
 
         LocalDate targetDate = LocalDate.now().minusDays(7);
         List<Visitor> visitors =
