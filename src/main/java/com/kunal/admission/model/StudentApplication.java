@@ -41,7 +41,6 @@ import java.time.LocalDateTime;
     private String marksheetPath;
     private String idProofPath;
 
-    //
 
     @Enumerated(EnumType.STRING)
     private AdmissionStatus status;
