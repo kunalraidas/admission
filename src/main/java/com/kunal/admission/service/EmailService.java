@@ -45,4 +45,41 @@ public class EmailService {
         mailSender.send(message);
         log.info("Follow - Up email sent to {}", visitor.getEmail());
     }
+
+    /**
+     * Sent automatically when Admin sets a visitor's status to ADMITTED.
+     * (Requirement 4 — Student Account Creation)
+     *
+     * @param defaultPassword  null if user already had an account (APPLICANT → STUDENT upgrade)
+     */
+    public void sendAdmissionConfirmationEmail(Visitor visitor, String defaultPassword) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(visitor.getEmail());
+        message.setSubject("Congratulations! You've been Admitted | BVICAM");
+
+        String body;
+        if (defaultPassword != null) {
+            // New student — first time account
+            body = "Dear " + visitor.getName() + ",\n\n" +
+                    "Congratulations! Your admission to BVICAM has been confirmed.\n\n" +
+                    "Your ERP login credentials are:\n" +
+                    "  Email:    " + visitor.getEmail() + "\n" +
+                    "  Password: " + defaultPassword + "\n\n" +
+                    "Please login and change your password immediately.\n\n" +
+                    "Regards,\n" +
+                    "BVICAM Admission Team";
+        } else {
+            // Existing applicant account upgraded to STUDENT
+            body = "Dear " + visitor.getName() + ",\n\n" +
+                    "Congratulations! Your admission to BVICAM has been confirmed.\n" +
+                    "Your existing account has been upgraded to a Student account.\n" +
+                    "Login with your registered email and password.\n\n" +
+                    "Regards,\n" +
+                    "BVICAM Admission Team";
+        }
+
+        message.setText(body);
+        mailSender.send(message);
+        log.info("Admission confirmation email sent to {}", visitor.getEmail());
+    }
 }

@@ -5,7 +5,8 @@ import com.kunal.admission.model.Visitor;
 import com.kunal.admission.service.VisitorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,25 @@ public class VisitorController {
 
     public VisitorController(VisitorService visitorService) {
         this.visitorService = visitorService;
+    }
+
+    /**
+     * GET /visitor/me
+     * Any authenticated user can fetch their own Visitor record (looked up by JWT email).
+     * The frontend uses the returned id to call /application/submit/{visitorId}.
+     */
+    @GetMapping("/me")
+    public ResponseEntity<?> getMe() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || auth.getName() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = auth.getName();
+        List<Visitor> matches = visitorService.searchByEmail(email);
+        if (matches.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(matches.get(0));
     }
 
     @GetMapping

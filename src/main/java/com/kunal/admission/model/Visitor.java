@@ -20,13 +20,21 @@ public class Visitor {
     private Long id;
 
     @NonNull
+    @Column(nullable = false)
     private String name;
+
     @NonNull
+    @Column(nullable = false, unique = true)
     private String email;
+
     @NonNull
+    @Column(nullable = false)
     private String phone;
+
     @NonNull
+    @Column(nullable = false)
     private String courseInterested;
+
     private LocalDate submissionDate;
 
     @Enumerated(EnumType.STRING)

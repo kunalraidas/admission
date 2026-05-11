@@ -53,13 +53,21 @@ public class AuthService {
         );
         userRepository.save(user);
 
-        Visitor visitor = new Visitor();
+        // If a Visitor record already exists for this email (e.g. they submitted the public
+        // enquiry form first), reuse and refresh it instead of inserting a duplicate row.
+        // Visitor.email is now unique at the DB level, so a duplicate insert would fail anyway.
+        java.util.List<Visitor> existing = visitorRepository.findByEmail(request.getEmail());
+        Visitor visitor = existing.isEmpty() ? new Visitor() : existing.get(0);
         visitor.setName(request.getName());
         visitor.setEmail(request.getEmail());
         visitor.setPhone(request.getPhone());
         visitor.setCourseInterested(request.getCourseInterested());
-        visitor.setSubmissionDate(LocalDate.now());
-        visitor.setStatus(AdmissionStatus.NEW);
+        if (visitor.getSubmissionDate() == null) {
+            visitor.setSubmissionDate(LocalDate.now());
+        }
+        if (visitor.getStatus() == null) {
+            visitor.setStatus(AdmissionStatus.NEW);
+        }
         visitorRepository.save(visitor);
 
         // Registration success

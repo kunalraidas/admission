@@ -23,8 +23,10 @@ public class FollowUpScheduler {
         this.emailService=emailService;
     }
 
-    //@Scheduled(cron = "0 0 10 * * ?")
-    @Scheduled(cron = "0 */1 * * * ?")
+    // Runs daily at 10:00 AM server time. Uncomment the every-minute cron below
+    // only for local debugging — never deploy with that enabled.
+    // @Scheduled(cron = "0 */1 * * * ?")  // every minute (debug only)
+    @Scheduled(cron = "0 0 10 * * ?")
     public void sendFollowUpMessages(){
         System.out.println("------- FOLLOW-UP SCHEDULER TRIGGERED --------- ");
 
